@@ -1,0 +1,35 @@
+#버전 수작업으로 할것
+FROM ubuntu:20.04
+LABEL email="tayasriel@gmail.com"
+LABEL name="BonhyeonGu"
+#Set the locale
+RUN apt-get update
+RUN apt-get install locales
+ENV LANG ko_KR.UTF-8
+ENV LANGUAGE ko_KR.UTF-8
+RUN update-locale LANG=ko_KR.UTF-8
+
+#Set the timezone
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Seoul
+RUN apt-get install -y tzdata
+
+#Install Apache2
+RUN apt install apache2 -y
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+ENV APACHE_PID_FILE /var/run/apache2/apache2.pid
+
+#Install php7
+RUN apt install software-properties-common -y
+RUN add-apt-repository ppa:ondrej/php
+RUN apt update
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt install php7.4 php7.4-common php7.4-cli -y
+RUN apt install php7.4-bcmath php7.4-bz2 php7.4-curl php7.4-gd php7.4-intl -y
+RUN apt install php7.4-json php7.4-mbstring php7.4-readline php7.4-xml php7.4-zip -y
+RUN apt install libapache2-mod-php7.4
+
+EXPOSE 80
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
