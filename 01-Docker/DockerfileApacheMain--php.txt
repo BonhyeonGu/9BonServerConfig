@@ -1,0 +1,73 @@
+#라인 20, 59, 63는 추가작업이 필요함!!!!!!!
+
+FROM php:7.4-apache
+LABEL email="tayasriel@gmail.com"
+LABEL name="BonhyeonGu"
+
+#업데이트: 패키지 관리자
+RUN apt update
+RUN apt-get update
+
+#설정: 시간
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Seoul
+RUN apt-get install -y tzdata
+
+#설치: 기타
+RUN apt-get install -y nano
+
+#설치: SSL관련--------------------
+#https://certbot.eff.org/lets-encrypt/otherpip-apache
+#설치: 파이썬 라이브러리
+RUN apt install python3 python3-venv libaugeas0 -y
+#추가: 파이썬 가상환경
+RUN python3 -m venv /opt/certbot/
+RUN /opt/certbot/bin/pip install --upgrade pip
+#설치: certbot
+RUN /opt/certbot/bin/pip install certbot certbot-apache
+#설정: 명령어
+RUN ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+#-------------------------------
+#설정: 언어
+#수동으로 해야하나?
+
+#설치: php-gd
+#문제: 특정 php7버전에서 freetype gd가 인식 못하는 유명한 버그가 있는듯
+#ㄴ재컴파일 하는 방법으로 해결하는 것으로 보임
+RUN apt-get install -y sendmail libpng-dev \
+		zlib1g-dev
+RUN docker-php-ext-install gd
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp
+RUN cd /usr/src/php/ext/gd && make
+RUN cp /usr/src/php/ext/gd/modules/gd.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/gd.so
+RUN docker-php-ext-install -j$(nproc) gd
+
+#설치: php-zip
+RUN apt-get install -y \
+        libzip-dev \
+        zip \
+		&& docker-php-ext-install zip
+
+RUN apt-get install libicu-dev
+docker-php-ext-install intl
+docker-php-ext-install bcmath
+
+#설치: php-gmp
+RUN apt-get install libgmp-dev \
+		&& docker-php-ext-install gmp
+
+RUN apt-get update && apt-get install -y \
+        libmagickwand-dev --no-install-recommends
+#!!!!!!엔터필요 이 문제를 해결할 방법 모색중!!!!RUN pecl install imagick && docker-php-ext-enable imagick
+
+#설치: php-apcu, opache
+#문제: 설정파일 조작 필요
+#자료: 안녕하세요, 나는 같은 문제가있었습니다. 나를 위해 해결책은 php.ini에서 apc.enable_cli = 1이었습니다 !!!
+RUN pecl install apcu \
+        && docker-php-ext-enable apcu \
+        && pecl clear-cache \
+		&& docker-php-ext-install opcache
+
+#명시: 나갈 포트
+EXPOSE 80
+EXPOSE 443
