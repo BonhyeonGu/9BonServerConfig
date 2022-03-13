@@ -1,0 +1,14 @@
+##
+/etc/ddclient ddns 설정
+/etc/fstab 마운트 등록
+
+#sensors
+apt install lm-sensors hddtemp
+sensors-detect
+sensors
+apt install psensor
+
+##방화벽 테이블을 직접 등록하는 방법
+https://lifestream.kr/89
+https://blog.tomclansys.com/8?category=1053133
+apt-get install fail2ban

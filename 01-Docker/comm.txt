@@ -1,0 +1,8 @@
+#이런식으로 컨테이너 내에 명령어를 내릴수 있음
+docker exec -u www-data nextcloud php occ files:scan --all
+
+#포트포워딩과 볼륨을 맵핑시킬 수 있음 추가하고 싶으면 첨자와 함께 추가로..
+docker run --name nextcloud -d -v /media/======/:/======/ -p =====:====== nextcloud
+
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=qkqh106!" -p 1434:1433 --name rpadb -d mcr.microsoft.com/mssql/server:2019-latest
+
