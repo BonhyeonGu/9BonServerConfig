@@ -1,3 +1,7 @@
+/var/www/html
+docker container run --name 01Nextcloud -d -v /media/ext1/Docker/01Nextcloud/:/var/www/html/ -p 8200:80 nextcloud
+
+
 #이런식으로 컨테이너 내에 명령어를 내릴수 있음
 docker exec -u www-data nextcloud php occ files:scan --all
 
@@ -5,4 +9,3 @@ docker exec -u www-data nextcloud php occ files:scan --all
 docker run --name nextcloud -d -v /media/======/:/======/ -p =====:====== nextcloud
 
 docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=qkqh106!" -p 1434:1433 --name rpadb -d mcr.microsoft.com/mssql/server:2019-latest
-
