@@ -4,7 +4,7 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=[PW]" -p 1434:1433 --name rpadb -d
 docker run --name 00Mariadb -d -p [PORT]:3306 --restart=always -e MYSQL_ROOT_PASSWORD='[PW]' mariadb
 docker run --name 02Nextcloud -d -v /[LOCAL]/:/var/www/html/ -p [PORT]:80 nextcloud
 docker run --name 01NginxMain -d -v /[LOCAL]/:/usr/share/nginx/html:ro -p 80:80 -p 443:443 nginx
-docker run --name 1627443_01Wiki -dit -v /nas_data/BonhyeonGu/wiki:/etc/wiki -p 5000:9010 ubuntu
+docker run --name 1627443_Wiki -dit -v /raid/1627443/Wikification_web:/etc/wiki -p xxxx:5000 ubuntu
 
 
 apt-get install -y locales
