@@ -7,6 +7,26 @@ docker run --name 01NginxMain -d -v /[LOCAL]/:/usr/share/nginx/html:ro -p 80:80 
 docker run --name 1627443_Wiki -dit -v /raid/1627443/Wikification_web:/etc/wiki -p xxxx:5000 ubuntu
 
 
+CREATE USER 'snipeit'@'%' IDENTIFIED BY 'xxxx';
+GRANT ALL PRIVILEGES ON snipeit.* TO 'snipeit'@'%';
+FLUSH PRIVILEGES;
+quit
+
+docker run -d --name=snipe-it \
+-e PUID=$UID \
+-e PGID=$(id -g $USER) \
+-e NGINX_APP_URL=192.168.10.50:8081 \
+-e MYSQL_PORT_3306_TCP_ADDR=192.168.10.50 \
+-e MYSQL_PORT_3306_TCP_PORT=3306 \
+-e MYSQL_DATABASE=snipeit \
+-e MYSQL_USER=snipeit \
+-e MYSQL_PASSWORD='1234' \
+-e APP_TIMEZONE=Asia/Seoul \
+-p 8081:80 \
+-v /data/snipe-it/config:/config \
+--restart unless-stopped \
+linuxserver/snipe-it
+
 apt-get install -y locales
 export LANGUAGE=ko_KR.UTF-8
 export LANG=ko_KR.UTF-8
