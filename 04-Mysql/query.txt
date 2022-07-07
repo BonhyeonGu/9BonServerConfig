@@ -1,0 +1,15 @@
+CREATE TABLE users(
+ no int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ id char(10) NOT NULL,
+ pw varchar(100) NOT NULL
+);
+
+CREATE TABLE testTable(
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  name VARCHAR(20) NOT NULL,
+  ouccupation VARCHAR(20) NULL,
+  height SMALLINT,
+  profile TEXT NULL,
+  date  DATETIME,
+  CONSTRAINT testTable_PK PRIMARY KEY(id)
+);
